@@ -109,6 +109,19 @@ describe('FloatingWindow', () => {
     expect(onRectChange).not.toHaveBeenCalled();
   });
 
+  it('calls onMinimize when the minimize button is activated', () => {
+    const onMinimize = vi.fn();
+    const { onRectChange } = renderWindow({ onMinimize });
+    fireEvent.click(screen.getByTestId('floating-window-minimize'));
+    expect(onMinimize).toHaveBeenCalledTimes(1);
+    expect(onRectChange).not.toHaveBeenCalled();
+  });
+
+  it('renders no minimize button when onMinimize is omitted', () => {
+    renderWindow();
+    expect(screen.queryByTestId('floating-window-minimize')).toBeNull();
+  });
+
   it('renders no close button when onClose is omitted', () => {
     render(
       <FloatingWindow rect={RECT} stage={STAGE} title="W" onRectChange={vi.fn()}>

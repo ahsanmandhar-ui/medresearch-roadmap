@@ -28,6 +28,8 @@ export interface FloatingWindowProps {
   onRectChange: (rect: Rect) => void;
   /** When provided, renders a close button that invokes this handler. */
   onClose?: () => void;
+  /** When provided, renders a minimize button that invokes this handler (M5.4). */
+  onMinimize?: () => void;
 }
 
 /** Pixels moved per arrow-key press. */
@@ -57,6 +59,7 @@ export function FloatingWindow({
   children,
   onRectChange,
   onClose,
+  onMinimize,
 }: FloatingWindowProps) {
   const reducedMotion = useReducedMotion();
   const [dragging, setDragging] = useState(false);
@@ -138,6 +141,23 @@ export function FloatingWindow({
     position: 'absolute',
     backgroundColor: 'transparent',
   };
+  const titleButton: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+    height: 24,
+    padding: 0,
+    border: 'none',
+    borderRadius: borderRadius.sm,
+    backgroundColor: 'transparent',
+    color: lightColors.textSecondary,
+    fontSize: typography.fontSize.base,
+    lineHeight: 1,
+    cursor: 'pointer',
+    transition,
+    outline: 'none',
+  };
 
   return (
     <div
@@ -188,38 +208,43 @@ export function FloatingWindow({
         >
           {title}
         </span>
-        {onClose ? (
-          <button
-            type="button"
-            data-testid="floating-window-close"
-            aria-label="Close"
-            onClick={onClose}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 24,
-              height: 24,
-              padding: 0,
-              border: 'none',
-              borderRadius: borderRadius.sm,
-              backgroundColor: 'transparent',
-              color: lightColors.textSecondary,
-              fontSize: typography.fontSize.base,
-              lineHeight: 1,
-              cursor: 'pointer',
-              transition,
-              outline: 'none',
-            }}
-            onFocus={(event) => {
-              event.currentTarget.style.boxShadow = `0 0 0 ${focusRing.width} ${focusRing.color}`;
-            }}
-            onBlur={(event) => {
-              event.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            ×
-          </button>
+        {onMinimize || onClose ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
+            {onMinimize ? (
+              <button
+                type="button"
+                data-testid="floating-window-minimize"
+                aria-label="Minimize"
+                onClick={onMinimize}
+                style={titleButton}
+                onFocus={(event) => {
+                  event.currentTarget.style.boxShadow = `0 0 0 ${focusRing.width} ${focusRing.color}`;
+                }}
+                onBlur={(event) => {
+                  event.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                –
+              </button>
+            ) : null}
+            {onClose ? (
+              <button
+                type="button"
+                data-testid="floating-window-close"
+                aria-label="Close"
+                onClick={onClose}
+                style={titleButton}
+                onFocus={(event) => {
+                  event.currentTarget.style.boxShadow = `0 0 0 ${focusRing.width} ${focusRing.color}`;
+                }}
+                onBlur={(event) => {
+                  event.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                ×
+              </button>
+            ) : null}
+          </div>
         ) : null}
       </div>
 
