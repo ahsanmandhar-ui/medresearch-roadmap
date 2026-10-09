@@ -16,4 +16,16 @@ export type {
   MinimizedBarOptions,
   PlaceWindowOptions,
 } from './layoutSolver.js';
+export {
+  createFloatingWindowModel,
+  getWindowState,
+  reduceWindow,
+  isModelConsistent,
+} from './floatingWindow.js';
+export type {
+  WindowState,
+  WindowCommand,
+  FloatingWindowModel,
+} from './floatingWindow.js';
+
 
