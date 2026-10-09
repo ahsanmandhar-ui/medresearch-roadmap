@@ -21,6 +21,12 @@ export {
 
 export { createIndexedDbRegistry } from './indexedDbRegistry.js';
 
+export {
+  exportUserData,
+  importUserData,
+  InvalidUserDataSnapshotError,
+} from './backup.js';
+
 export type {
   StoredRecord,
   ObjectStoreBackend,
@@ -41,3 +47,5 @@ export type {
 } from './notesStore.js';
 
 export type { IndexedDbRegistryOptions } from './indexedDbRegistry.js';
+
+export type { UserDataSnapshot } from './backup.js';

@@ -82,11 +82,12 @@ export interface NotesApi {
   list(): Promise<StoredRecord<Note>[]>;
 }
 
-/** Assets facade: get / put / delete + list references by node. */
+/** Assets facade: get / put / delete + list references (all, or by node). */
 export interface AssetsApi {
   get(id: string): Promise<AssetRef | undefined>;
   put(asset: AssetRef): Promise<void>;
   delete(id: string): Promise<void>;
+  list(): Promise<AssetRef[]>;
   listByNode(nodeId: string): Promise<AssetRef[]>;
 }
 
@@ -135,6 +136,10 @@ export function createUserStore(options: PersistenceStoreOptions = {}): UserStor
     },
     async delete(id) {
       await assetsStore.delete(id);
+    },
+    async list() {
+      const all = await assetsStore.list();
+      return all.map((record) => record.value);
     },
     async listByNode(nodeId) {
       const all = await assetsStore.list();
