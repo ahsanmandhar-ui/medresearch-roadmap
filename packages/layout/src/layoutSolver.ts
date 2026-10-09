@@ -62,6 +62,11 @@ export function moveWindow(rect: Rect, delta: Point, stage: Size): Rect {
 /**
  * Resize a window to `next` size, honoring a minimum, keeping the top-left
  * fixed, and clamping inside the stage (a window can never grow past the stage).
+ *
+ * The top-left stays fixed: the window may only grow into the space remaining
+ * to the right/bottom of its origin, so its right and bottom edges land exactly
+ * on the stage bounds rather than the whole window jumping to the origin
+ * (docs/ARCHITECTURE.md §5).
  */
 export function resizeWindow(
   rect: Rect,
@@ -69,8 +74,8 @@ export function resizeWindow(
   stage: Size,
   min: Size = DEFAULT_MIN_WINDOW,
 ): Rect {
-  const width = clamp(next.width, min.width, stage.width);
-  const height = clamp(next.height, min.height, stage.height);
+  const width = clamp(next.width, min.width, stage.width - rect.x);
+  const height = clamp(next.height, min.height, stage.height - rect.y);
   return clampWindowToStage({ x: rect.x, y: rect.y, width, height }, stage);
 }
 

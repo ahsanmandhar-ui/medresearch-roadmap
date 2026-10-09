@@ -68,4 +68,8 @@ export {
 export type { SoftwareGuideKind, ResourceOs } from './softwareGuide.js';
 export { SoftwareGuideViewer } from './components/SoftwareGuideViewer.js';
 export type { SoftwareGuideViewerProps, SoftwareGuideViewerTheme } from './components/SoftwareGuideViewer.js';
+export { applyWindowGesture } from './windowGesture.js';
+export type { WindowGestureMode, WindowGestureInput } from './windowGesture.js';
+export { FloatingWindow } from './components/FloatingWindow.js';
+export type { FloatingWindowProps } from './components/FloatingWindow.js';
 

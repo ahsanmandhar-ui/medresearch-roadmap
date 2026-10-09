@@ -97,6 +97,15 @@ describe('resizeWindow', () => {
     expect(resized).toEqual({ x: 0, y: 0, width: 1200, height: 800 });
   });
 
+  it('keeps the top-left fixed and clamps to the remaining space when a window not at the origin grows past the stage', () => {
+    // Regression: previously the size clamped to the absolute stage size and
+    // clampWindowToStage then shifted x/y to 0, making the window jump to the
+    // origin instead of growing with a fixed top-left (ARCHITECTURE.md §5).
+    const rect: Rect = { x: 100, y: 100, width: 300, height: 200 };
+    const resized = resizeWindow(rect, { width: 9999, height: 9999 }, STAGE);
+    expect(resized).toEqual({ x: 100, y: 100, width: STAGE.width - 100, height: STAGE.height - 100 });
+  });
+
   it('accepts a custom minimum', () => {
     const rect: Rect = { x: 0, y: 0, width: 400, height: 300 };
     const resized = resizeWindow(
@@ -107,6 +116,8 @@ describe('resizeWindow', () => {
     );
     expect(resized.width).toBe(500);
     expect(resized.height).toBe(500);
+  });
+});
 
 describe('rectsOverlap', () => {
   it('is true for overlapping interiors', () => {
@@ -212,8 +223,5 @@ describe('clampAllToStage', () => {
     }
     // The middle, already-inside rect must be unchanged.
     expect(clamped[1]).toEqual(rects[1]);
-  });
-});
-
   });
 });

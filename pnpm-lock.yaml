@@ -160,6 +160,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@research-roadmap/layout':
+        specifier: workspace:*
+        version: link:../layout
       '@research-roadmap/schema':
         specifier: workspace:*
         version: link:../schema
