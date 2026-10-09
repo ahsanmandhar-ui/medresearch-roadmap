@@ -68,6 +68,8 @@ M5.3 drag/resize
 M5.4 minimize/restore
 M5.5 pane stacking
 M5.6 camera insets
+M5.7 window-manager store (useWindowManager: raise/paint-order/cascade/minimize-bar docking + open/close/minimize/restore via reduceWindow; renders panes via FloatingWindow + MinimizedBar; consumes M5.6 camera insets with the live camera + window set — added per STATE plan-vs-state drift, 2026-10-09)
+M5.8 focus restoration (M3.4b: restore focus to the opener when a floating window closes, ARCHITECTURE §5 — coupled to M5.7 which owns open/close; added per STATE plan-vs-state drift, 2026-10-09)
 
 ## M6 — Local persistence/PWA
 

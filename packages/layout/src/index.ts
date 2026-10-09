@@ -37,5 +37,18 @@ export {
   getZIndex,
 } from './windowStack.js';
 export type { StackableState, StackedPane } from './windowStack.js';
+export {
+  computeViewportInsets,
+  computeFreeViewport,
+  focusCameraOnFreeViewport,
+  fitBoundsToFreeViewport,
+} from './cameraInsets.js';
+export type {
+  CameraState,
+  WorldBounds,
+  InsetWindow,
+  ViewInsets,
+  FitInsetsOptions,
+} from './cameraInsets.js';
 
 
