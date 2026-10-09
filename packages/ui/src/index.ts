@@ -74,4 +74,23 @@ export { FloatingWindow } from './components/FloatingWindow.js';
 export type { FloatingWindowProps } from './components/FloatingWindow.js';
 export { MinimizedBar } from './components/MinimizedBar.js';
 export type { MinimizedBarProps } from './components/MinimizedBar.js';
+export {
+  createWindowManagerState,
+  windowManagerReducer,
+  getManagedPanes,
+  getManagedMinimizedBars,
+  getManagedViewport,
+  focusCamera,
+  fitCamera,
+  DEFAULT_MINIMIZED_BAR,
+} from './windowManager.js';
+export type {
+  WindowManagerState,
+  WindowManagerCommand,
+  ManagedPane,
+  ManagedMinimizedBar,
+  ManagedViewport,
+} from './windowManager.js';
+export { useWindowManager } from './hooks/useWindowManager.js';
+export type { UseWindowManagerOptions, UseWindowManagerResult } from './hooks/useWindowManager.js';
 
