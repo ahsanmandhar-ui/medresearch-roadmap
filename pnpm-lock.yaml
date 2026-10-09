@@ -142,6 +142,18 @@ importers:
         specifier: ^2.0.0
         version: 2.1.9(@types/node@22.20.5)(jsdom@25.0.1(supports-color@7.2.0))(supports-color@7.2.0)
 
+  packages/persistence:
+    devDependencies:
+      eslint:
+        specifier: ^9.0.0
+        version: 9.39.5(supports-color@7.2.0)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.0.0
+        version: 2.1.9(@types/node@22.20.5)(jsdom@25.0.1(supports-color@7.2.0))(supports-color@7.2.0)
+
   packages/schema:
     dependencies:
       zod:
