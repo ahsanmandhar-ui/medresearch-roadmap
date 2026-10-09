@@ -8,9 +8,9 @@ Define the process for verifying resources before they appear in the production 
 
 | State | Meaning | Viewer Visibility |
 |-------|---------|-------------------|
-| `pending` | Discovered but not yet checked | Master editor only |
+| `pending` | Discovered but not yet checked | Not shown in public Viewer (kept in repo content files only) |
 | `verified` | Checked and confirmed valid | Public Viewer |
-| `rejected` | Checked and found unacceptable | Master editor only (with reason) |
+| `rejected` | Checked and found unacceptable | Not shown in public Viewer (kept in repo content files only, with reason) |
 
 ## Verification Workflow
 
@@ -61,7 +61,7 @@ Reviewer assigns:
 
 - `verified` resources become eligible for production Viewer
 - `rejected` resources are logged with reason for future reference
-- `pending` resources remain in Master editor only
+- `pending` resources remain in repo content files only (not shown in the public Viewer)
 
 ## Rejection Criteria
 

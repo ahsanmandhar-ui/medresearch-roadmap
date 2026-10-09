@@ -79,20 +79,27 @@ M6.3 backup/restore
 M6.4 service worker
 M6.5 installability
 
-## M7 — Master editor
+## M7 — Master editor — SKIPPED (user decision 2026-10-10)
 
-M7.1 editor shell
-M7.2 graph editing
-M7.3 resource editing
-M7.4 verification workflow
-M7.5 preview
-M7.6 atomic Git commit
+> **SKIPPED (user decision 2026-10-10): no in-app master editor.** The app is a static
+> site on GitHub + Netlify; a private master editor with auth and Git-commit write paths
+> is too hard to maintain. Content is authored by editing the JSON content files in the
+> repo directly, validated by the M1.4 validator and guarded by the M1.5 CI. M7.1–M7.6 are
+> removed from scope; titles are kept below (struck-through) so history stays readable.
+
+- ~~M7.1 editor shell~~ (skipped)
+- ~~M7.2 graph editing~~ (skipped)
+- ~~M7.3 resource editing~~ (skipped)
+- ~~M7.4 verification workflow~~ (skipped — for M9, verification is the manual process in docs/RESOURCE_REVIEW.md)
+- ~~M7.5 preview~~ (skipped)
+- ~~M7.6 atomic Git commit~~ (skipped — commits happen by editing content JSON + a normal Git PR/commit)
+
 
 ## M8 — Security/deployment
 
-M8.1 owner auth
-M8.2 GitHub API protection
-M8.3 audit logging
+M8.1 owner auth — DEFERRED (user decision 2026-10-10: no in-app write path; commits are manual Git on the repo, not runtime-authenticated)
+M8.2 GitHub API protection — DEFERRED (user decision 2026-10-10: static site makes no runtime GitHub write calls)
+M8.3 audit logging — DEFERRED (user decision 2026-10-10: Git history is the audit log for manual commits)
 M8.4 deployment
 M8.5 security review
 

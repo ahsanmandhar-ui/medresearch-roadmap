@@ -14,7 +14,7 @@ This file separates confirmed product requirements from decisions that must not 
 | P06 | YouTube can play inside the designed interface when embedding permits | CONFIRMED |
 | P07 | User wants modular OpenCode execution with cross-session resume | CONFIRMED |
 | P08 | Missing requirements must be requested rather than assumed | CONFIRMED |
-| P09 | Public Viewer + private Master/content editor | CONFIRMED |
+| P09 | Public Viewer + private Master/content editor | CONFIRMED, AMENDED 2026-10-10: Public Viewer only; the private Master/content editor is NOT built (static site). Content is authored by editing JSON files in the repo directly, validated by M1.4 + M1.5 CI. |
 | P10 | Exact final branding/name | CONFIRMED: "Research Roadmap" |
 | P11 | Exact logo/assets | CONFIRMED: Design placeholder (no user assets) |
 | P12 | Exact colors beyond supplied visual direction | CONFIRMED: Neutral gray/green |

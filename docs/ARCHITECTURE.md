@@ -10,7 +10,7 @@ A public installable web application presents an interactive research roadmap as
 
 Resources may open in an animated floating window over the map. Only one resource partition may be detached at a time.
 
-A private Master application edits graph/content data and commits validated changes to Git.
+A private Master application is intentionally NOT built (user decision 2026-10-10): the app is a static site on GitHub + Netlify. Graph/content data is authored by editing the JSON content files in the repo directly, validated by the M1.4 validator and guarded by the M1.5 CI, then deployed.
 
 ## 2. Repository
 
@@ -127,18 +127,18 @@ Resource window
 verified viewer adapter
 ```
 
-Master:
+Authoring (edit JSON files in the repo):
 
 ```text
-Editor
+Edit content JSON
  ↓
 schema validation
  ↓
-resource verification
+resource verification (manual, docs/RESOURCE_REVIEW.md)
  ↓
-diff preview
+review / PR
  ↓
-atomic Git commit
+manual Git commit
  ↓
 CI validation
  ↓
@@ -204,8 +204,8 @@ Targets:
 - HTTPS external URLs;
 - SSRF protection for server-side embed checks;
 - sanitized Markdown;
-- GitHub write token server-side only;
-- owner authorization server-side;
+- GitHub write token server-side only — DEFERRED (user decision 2026-10-10: no in-app write path; commits are manual local Git, no token in the client);
+- owner authorization server-side — DEFERRED (user decision 2026-10-10: no runtime write path to authorize);
 - strict CSP where practical.
 
 ## 10. Architecture changes

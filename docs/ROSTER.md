@@ -10,7 +10,7 @@
 | Design Engineer | packages/ui | visual system |
 | Window Engineer | packages/layout | floating resource windows |
 | Viewer Engineer | apps/viewer | public application |
-| Master Engineer | apps/master | editing workflow |
+| Master Engineer | apps/master (NOT BUILT — user decision 2026-10-10) | authoring is done by the Schema/Data + Research Curator agents editing repo JSON |
 | Security Engineer | master/functions | auth/SSRF/GitHub writes |
 | PWA Engineer | viewer/PWA/infra | offline/install/deployment |
 | QA Engineer | tests | validation and browser testing |
