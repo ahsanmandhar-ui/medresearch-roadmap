@@ -59,4 +59,13 @@ export { WebEmbedViewer } from './components/WebEmbedViewer.js';
 export type { WebEmbedViewerProps, WebEmbedViewerTheme } from './components/WebEmbedViewer.js';
 export { isWebEmbedKind, resolveWebEmbedMode, displayHost } from './webEmbed.js';
 export type { WebEmbedKind, WebEmbedMode } from './webEmbed.js';
+export {
+  isSoftwareGuideKind,
+  resolveSoftwareGuideCta,
+  formatOsLabels,
+  OS_LABELS,
+} from './softwareGuide.js';
+export type { SoftwareGuideKind, ResourceOs } from './softwareGuide.js';
+export { SoftwareGuideViewer } from './components/SoftwareGuideViewer.js';
+export type { SoftwareGuideViewerProps, SoftwareGuideViewerTheme } from './components/SoftwareGuideViewer.js';
 
