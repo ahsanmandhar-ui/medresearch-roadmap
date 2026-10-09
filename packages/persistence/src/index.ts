@@ -13,6 +13,12 @@ export {
   createPersistenceStore,
 } from './keyValueStore.js';
 
+export {
+  createUserStore,
+  userDataSchema,
+  userDataMigrations,
+} from './notesStore.js';
+
 export type {
   StoredRecord,
   ObjectStoreBackend,
@@ -23,3 +29,11 @@ export type {
   PersistenceStore,
   PersistenceStoreOptions,
 } from './keyValueStore.js';
+
+export type {
+  Note,
+  AssetRef,
+  NotesApi,
+  AssetsApi,
+  UserStore,
+} from './notesStore.js';
