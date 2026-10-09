@@ -93,4 +93,13 @@ export type {
 } from './windowManager.js';
 export { useWindowManager } from './hooks/useWindowManager.js';
 export type { UseWindowManagerOptions, UseWindowManagerResult } from './hooks/useWindowManager.js';
+export {
+  recordOpener,
+  consumeOpener,
+  forgetOpener,
+  hasOpener,
+} from './focusRestore.js';
+export type { FocusReturnMap, ConsumeOpenerResult } from './focusRestore.js';
+export { useFocusRestore } from './hooks/useFocusRestore.js';
+export type { UseFocusRestoreResult } from './hooks/useFocusRestore.js';
 
