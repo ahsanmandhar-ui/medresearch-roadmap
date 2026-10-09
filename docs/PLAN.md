@@ -77,9 +77,14 @@ M6.1 IndexedDB (DONE — delivered the pure/DOM-free versioned key-value primiti
 M6.2 notes/assets (DONE — split into two sub-slices:)
   M6.2a pure notes + asset-reference store (DONE — `notesStore.ts` on the M6.1 primitive, memory-driver tested, user-local)
   M6.2b real browser IndexedDB `ObjectStoreBackend` driver (DONE — `indexedDbRegistry.ts`, `createIndexedDbRegistry`, tested with fake-indexeddb; closes the M6.1 IndexedDB gap)
-M6.3 backup/restore
-M6.4 service worker
-M6.5 installability
+M6.3 backup/restore (DONE — `backup.ts` exportUserData/importUserData JSON snapshot, memory-driver tested)
+M6.4 service worker / offline (split into sub-slices, added 2026-10-10 after apps/viewer reassigned to persistence agent per AGENTS.md §3 exception):
+  M6.4a app shell — buildable, deployable Vite + React baseline (unblocks M8.4 Netlify)
+  M6.4b render the real roadmap graph from data/graph.json via core + ui
+  M6.4c service worker — offline cache (pure precache module + thin injectable register)
+M6.5 installability (split into sub-slices, added 2026-10-10):
+  M6.5a web app manifest + icons + install link
+  M6.5b wire persistence (createUserStore + IndexedDB + backup/restore) into the app shell
 
 ## M7 — Master editor — SKIPPED (user decision 2026-10-10)
 
