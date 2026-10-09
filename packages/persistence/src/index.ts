@@ -19,6 +19,8 @@ export {
   userDataMigrations,
 } from './notesStore.js';
 
+export { createIndexedDbRegistry } from './indexedDbRegistry.js';
+
 export type {
   StoredRecord,
   ObjectStoreBackend,
@@ -37,3 +39,5 @@ export type {
   AssetsApi,
   UserStore,
 } from './notesStore.js';
+
+export type { IndexedDbRegistryOptions } from './indexedDbRegistry.js';

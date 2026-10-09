@@ -73,8 +73,10 @@ M5.8 focus restoration (M3.4b: restore focus to the opener when a floating windo
 
 ## M6 — Local persistence/PWA
 
-M6.1 IndexedDB
-M6.2 notes/assets
+M6.1 IndexedDB (DONE — delivered the pure/DOM-free versioned key-value primitive `packages/persistence/src/keyValueStore.ts` with an injected backend driver + migration planner; the real browser IndexedDB driver was split out to M6.2b below)
+M6.2 notes/assets (DONE — split into two sub-slices:)
+  M6.2a pure notes + asset-reference store (DONE — `notesStore.ts` on the M6.1 primitive, memory-driver tested, user-local)
+  M6.2b real browser IndexedDB `ObjectStoreBackend` driver (DONE — `indexedDbRegistry.ts`, `createIndexedDbRegistry`, tested with fake-indexeddb; closes the M6.1 IndexedDB gap)
 M6.3 backup/restore
 M6.4 service worker
 M6.5 installability
