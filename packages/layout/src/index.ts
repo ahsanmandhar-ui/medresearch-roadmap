@@ -27,5 +27,15 @@ export type {
   WindowCommand,
   FloatingWindowModel,
 } from './floatingWindow.js';
+export {
+  STACK_LAYER,
+  bringToFront,
+  removeFromStack,
+  stackIndex,
+  isOnTop,
+  getStackingOrder,
+  getZIndex,
+} from './windowStack.js';
+export type { StackableState, StackedPane } from './windowStack.js';
 
 
