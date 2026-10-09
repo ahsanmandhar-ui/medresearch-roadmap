@@ -1,0 +1,166 @@
+# Cross-Session State
+
+current: M4 | resource experience (M4.1 data-section + M4.2 resource-cards + M4.3 youtube-embed done)
+status: in-progress
+
+done:
+- project control files created
+- OpenCode cross-session protocol defined
+- research resource integrity rules defined
+- architecture and content schema defined
+- S0.1 requirements interview completed — all NEEDS_USER_INPUT resolved
+- S0.2 content taxonomy approved — 18 nodes, 61 resources documented
+- S0.3 resource discovery specification completed — verification workflow and content rules defined
+- M1.1 monorepo scaffolding completed — pnpm workspaces, 6 packages, root tsconfig
+- M1.2 TypeScript/lint/test/build completed — ESLint flat config, Vitest, build scripts for all packages
+- M1.3 schema package completed — Zod schemas, types, validators, 19 unit tests passing
+- M1.4 content validator completed — validateContent + transformToDomainModel, 9 unit tests passing
+- B001 resolved — pnpm reinstalled with allow-scripts, workspace binaries linked
+- M1.5 CI completed — GitHub Actions workflow with typecheck, lint, test, build jobs
+- M2.1 graph data loader completed — loadGraph, getNode, getChildren, getParents, search, 32 unit tests passing
+- M2.2 node rendering completed — NodeComponent with states, ARIA, keyboard nav, 8 unit tests passing
+- M2.3 graph edges completed — EdgeComponent with SVG curves, arrow markers, active/inactive states, 7 unit tests passing
+- M2.4 camera/focus completed — pan, zoom, focusOn, fitBounds, coordinate transforms, 21 unit tests passing
+- M2.5 search completed — full-text search with ranking, filters, suggestions, 14 unit tests passing
+- M2.6 checkpoints/progress completed — progress tracking, notes, localStorage persistence, 27 unit tests passing
+- M3.1 theme tokens completed — color palette, typography, spacing, shadows, z-index, breakpoints, light/dark variants, 16 unit tests passing
+- M3.2 node visual treatment completed — 7 node states, light/dark variants, hover/focus/selected/completed/locked styles, 15 unit tests passing
+- M3.3 responsive layout completed — useMediaQuery, useBreakpoint hooks, mobile/tablet/desktop detection, 5 unit tests passing
+- M3.4 reduced-motion support completed (2026-10-09, Cline session) — useReducedMotion hook + pure motion helpers (resolveTransition, resolveDuration, NO_MOTION), 8 new unit tests; also fixed pre-existing lint error in Edge.tsx (unused `dy`)
+- M3.4a keyboard-navigation-graph completed (2026-10-09, Cline session) — pure keyboardNav.ts solver (findNextNode/directionFromKey), useGraphKeyboardNavigation hook, 14 new unit tests; exported from package index
+- M3.5a viewport-culling completed (2026-10-09, Cline session) — pure culling.ts (isRectInBounds, cullNodesToBounds, countVisible, getCullStats) with world-space WorldBounds input; 13 new unit tests; exported from package index
+- M3.5b frame-coalescing render scheduler completed (2026-10-09, Cline session) — pure renderScheduler.ts (createRenderScheduler) collapses N schedule() calls into one flush per frame; injectable frame mechanism (rAF w/ setTimeout fallback); 7 new unit tests; exported from package index
+- M4.1 sidebar/data section completed (2026-10-09, Cline session) — DataSection.tsx presents selected RoadmapNode details (description, learning goals, prerequisites, leads-to, what's-next, common mistakes, resource+verified summary); M3.1 theme tokens + M3.4a reduced-motion; related-node titles caller-resolved (no ui→core dep); 8 new component tests; added global jsdom matchMedia test setup
+- M4.2 resource cards completed (2026-10-09, Cline session) — ResourceCard.tsx renders a schema ResourceRef (title, description, organization, kind/difficulty/priority badges, tags, checked-at, verified-only viewer slot, external-open link); semantic-color verification badges (verified=success/pending=warning/rejected=error); useReducedMotion hover; keyboard-focusable link with rel=noopener noreferrer; 9 new component tests; consumed ResourceRef + VerificationStatus/Difficulty/Priority from @research-roadmap/schema
+- M4.3 youtube embed viewer completed (2026-10-09, Cline session) — youtubeEmbed.ts pure parser (extractYouTubeIds, resolveYouTubeEmbedTarget, buildPrivacyEnhancedEmbedUrl) derives video/playlist ids from the verified resource URL (never fabricated); YouTubeEmbed.tsx renders a 16:9 privacy-enhanced youtube-nocookie.com iframe only for iframe-mode youtube-video/playlist resources (delivered via ResourceCard.viewer); 15 parser + 7 component tests
+
+decisions:
+- one session executes one slice
+- STATE.md is the sole cross-session handoff source
+- unknown resources remain pending
+- public Viewer displays verified resources only
+- GitHub repos use cards/README rather than iframe
+- YouTube uses privacy-enhanced embed when permitted
+- brand: "Research Roadmap"
+- colors: neutral gray/green
+- deployment: GitHub (dev/VC) + Netlify (hosting), domain researchroadmap.com
+- domain scope: both core methods + medical/clinical tracks
+- videos: English only
+- commercial tools: included with clear labeling
+- mobile: bottom nav + bottom sheets + resource sheets + swipe gestures
+- visual reference: uidesign/ folder (4 assets)
+- reduced-motion: detect via prefers-reduced-motion (useReducedMotion on useMediaQuery); collapse transitions to 'none' and durations to '0ms' via pure motion helpers; consumed by UI components to disable nonessential animation
+- keyboard navigation: pure DOM-free spatial solver (keyboardNav.ts) picks nearest node by primary axis distance, ties broken by perpendicular drift toward alignment; a thin useGraphKeyboardNavigation hook maps keydown→direction→solver→onNavigate (focus management delegated to caller). Neighbor testNode predicates are ignored on purpose; consistent with camera spatialDistance convention in packages/core.
+- viewport culling (M3.5a): pure AABB intersection over world-space rects. Caller derives WorldBounds from the camera via core's screenToWorld (single source of truth for the world↔screen transform) — culling.ts does NOT duplicate that transform and does NOT depend on packages/core, keeping packages/ui dependency-free (no ui→core edge). Render only nodes intersecting the visible region; optional `padding` renders a margin to avoid pop-in during pan/zoom.
+- render scheduler (M3.5b): createRenderScheduler(flush) coalesces many schedule() calls into one flush per animation frame (pan/zoom/hover fire per-event). Frame mechanism is injected for deterministic tests + SSR safety; defaults to requestAnimationFrame with setTimeout fallback. Guarantees at most one flush per frame and none after cancel(). Wire a graph container's render() through it in M4/M5.
+- data section (M4.1): DataSection renders a selected RoadmapNode's details using M3.1 tokens. Related-node (prerequisites/children) TITLES are passed in pre-resolved (caller uses core.getParents/getChildren) so packages/ui stays free of a ui→core dependency — component imports only RoadmapNode from @research-roadmap/schema (already a ui dependency). Resource summary shows total + verified counts only (AGENTS.md §2: never fabricate metadata; production shows verified only). Hover motion respects useReducedMotion. jsdom lacks window.matchMedia, so a global vitest setup (packages/ui/src/test/setup.ts) mocks it for component tests that touch media-query hooks.
+- resource card (M4.2): ResourceCard renders a schema-validated ResourceRef. Uses M3.1 semantic tokens for verification badges (verified→success, pending→warning, rejected→error); neutral badges for kind/difficulty/priority. Verification-gated viewer slot (AGENTS.md §5): an optional `viewer` node is shown ONLY for verified resources so unverified content is never displayed in production; external-open link always present with target=_blank + rel=noopener noreferrer (AGENTS.md §4 security). Imports ResourceRef/VerificationStatus/Difficulty/Priority types from @research-roadmap/schema (already a ui dependency; no ui→core dep). Reduced-motion respected for hover transitions; external link is keyboard-focusable with a visible focus ring. This is the reusable card shell that M4.3–M4.6 viewers plug into via the `viewer` prop. jsdom note: blur sets box-shadow:'none' which jsdom keeps normalized as 'none' (not '') — test asserts 'none'.
+- youtube embed (M4.3): youtubeEmbed.ts is a pure, DOM-free parser. IDs are DERIVED from the resource's already-verified URL (extractYouTubeIds handles watch/?v=, ?list=, youtu.be, /embed/, /shorts/, /live/, /playlist?list=) — never fabricated (AGENTS.md §2). resolveYouTubeEmbedTarget matches id to kind (playlist needs list id; video needs v id). buildPrivacyEnhancedEmbedUrl ALWAYS emits youtube-nocookie.com/embed (privacy-enhanced, AGENTS.md §5) — never the tracking youtube.com domain. YouTubeEmbed.tsx renders a responsive 16:9 iframe only when kind is youtube-video/playlist AND embed==='iframe' AND a valid id resolves; otherwise renders nothing (non-iframe modes fall back to the card's external-open link). Delivered via ResourceCard's `viewer` prop. Does not proxy/strip frame-blocking headers (AGENTS.md §4).
+
+confirmed requirements:
+- P10: Research Roadmap
+- P11: Design placeholder
+- P12: Neutral gray/green
+- P13: GitHub + Netlify, researchroadmap.com
+- C05: 18 nodes, 61 resources (4 batches)
+- C06: Both tracks
+- C07: English only
+- C08: Include commercial
+- U08: Bottom nav + sheets + swipe
+- U09: uidesign/ folder
+
+open risks:
+- initial resource corpus not yet verified (61 resources pending validation)
+- deployment target not yet confirmed (Netlify plan, domain registration)
+- packages/core lint gate is red (pre-existing, unrelated to M3.4) — must be cleared by core agent before a repo-wide `lint` gate can pass
+
+next: M4.4 | github repo viewer (card w/ README preview + Open button — NO iframe of GitHub per AGENTS.md §5)
+
+next_options (priority order):
+- M4 resource experience (plan-order next milestone after M3): M4.1 sidebar/data section, M4.2 resource cards, M4.3 YouTube embed, M4.4 GitHub repo viewer, M4.5 web embed verification, M4.6 software/guide viewer. Start with M4.1. This is where a graph/container view is likely assembled — wire the M3.5a culling + M3.5b render-scheduler + M3.4a keyboard-nav primitives into it.
+- M3.5b wiring (deferred): once a graph container exists in M4/M5, route render() through createRenderScheduler and render cullNodesToBounds(nodes, worldBounds-from-camera). Not a standalone slice before a container exists.
+- M3.4b focus restoration — blocked on M5 window system. Defer.
+- M5 floating-window system — later milestone; unlocks M3.4b.
+- Contrast-checking utility/test + ARIA-label audit as components are built (M4/M5).
+
+checkpoint_verification (2026-10-09, Cline/Step5 resume session):
+- M3.3 independently reproduced: packages/ui 51/51, packages/core 94/94, packages/schema 19/19 — all green BEFORE M3.4 work
+- Reported M3.3 desktop-mock fix confirmed present (useMediaQuery.test.tsx returns true for '(min-width: 1024px)')
+- Git: branch master, NO commits, NO remotes — all work is untracked and was preserved (no commit/push performed; no destructive git used)
+- Pre-existing lint debt discovered: packages/core has 6 no-unused-vars errors (contentValidator.ts x5, progress.test.ts x1) — NOT in scope for M3.4 (core is data-runtime agent area) → handoff request filed in docs/REQUESTS.md
+
+m34_gates (Cline session 2026-10-09, packages/ui):
+- test: 59/59 passed (7 files) — was 51/51; +8 from motion.test.ts (5) and useReducedMotion.test.tsx (3)
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output) — includes the Edge.tsx unused-`dy` fix
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted motion.d.ts, hooks/useReducedMotion.d.ts)
+- Note: run package binaries directly (node_modules/.bin/*.cmd) with file redirection on PowerShell; do not run `pnpm test`/`pnpm --parallel` directly (PowerShell mangles stderr → false non-zero exit). First Vite/jsdom transform takes ~20-26s.
+
+m34a_gates (Cline session 2026-10-09, packages/ui):
+- test: 73/73 passed (9 files) — was 59/59; +14 from keyboardNav.test.ts (10) and useGraphKeyboardNavigation.test.tsx (4)
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output)
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted keyboardNav.d.ts, hooks/useGraphKeyboardNavigation.d.ts)
+- files created: src/keyboardNav.ts, src/keyboardNav.test.ts, src/hooks/useGraphKeyboardNavigation.ts, src/hooks/useGraphKeyboardNavigation.test.tsx
+- files modified: src/index.ts, src/hooks/index.ts (exports)
+- scope note: M3.4a delivers the reusable navigation PRIMITIVES (solver + hook) in packages/ui. Actual keydown wiring into a rendered graph component is deferred to M4/M5 app slices where a graph container exists; NodeComponent already has its own single-node keyboard handling from M2.2 which is unaffected.
+
+m35a_gates (Cline session 2026-10-09, packages/ui):
+- test: 86/86 passed (10 files) — was 73/73; +13 from culling.test.ts
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output)
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted culling.d.ts)
+- files created: src/culling.ts, src/culling.test.ts
+- files modified: src/index.ts (exports)
+- scope note: M3.5a delivers the pure viewport-culling PRIMITIVES in packages/ui, operating on world-space WorldBounds. Wiring into a rendered graph container is deferred to M4/M5 where a container + camera exist. Caller computes WorldBounds via packages/core screenToWorld (no ui→core dependency introduced).
+
+m35b_gates (Cline session 2026-10-09, packages/ui):
+- test: 93/93 passed (11 files) — was 86/86; +7 from renderScheduler.test.ts
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output)
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted renderScheduler.d.ts)
+- files created: src/renderScheduler.ts, src/renderScheduler.test.ts
+- files modified: src/index.ts (exports)
+- scope note: M3.5b delivers a pure frame-coalescing render-scheduler PRIMITIVE in packages/ui. No @ts-ignore/@ts-expect-error used (AGENTS.md §4); the rAF-fallback test simulates a missing rAF via Object.defineProperty. Wiring a graph container's render() through the scheduler is deferred to M4/M5.
+
+m41_gates (Cline session 2026-10-09, packages/ui):
+- test: 101/101 passed (12 files) — was 93/93; +8 from DataSection.test.tsx
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output)
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted dist/components/DataSection.d.ts)
+- files created: src/components/DataSection.tsx, src/components/DataSection.test.tsx, src/test/setup.ts
+- files modified: src/index.ts (exports), vitest.config.ts (setupFiles → global jsdom matchMedia mock)
+- scope note: M4.1 delivers the sidebar/data-section React component in packages/ui. It renders a selected RoadmapNode's details; prerequisites/leads-to are caller-resolved titles (no ui→core dep). First failure during the slice was `window.matchMedia is not a function` under jsdom — a TEST-environment gap (jsdom lacks matchMedia), NOT a production bug; fixed with a global vitest setup mock, not by weakening source. Uses fireEvent (not user-event) to avoid adding a dependency. Consuming DataSection in an actual layout is deferred to M4.2+ when a graph/sidebar shell exists.
+
+m42_gates (Cline session 2026-10-09, packages/ui):
+- test: 110/110 passed (13 files) — was 101/101; +9 from ResourceCard.test.tsx
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output)
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted dist/components/ResourceCard.d.ts)
+- files created: src/components/ResourceCard.tsx, src/components/ResourceCard.test.tsx
+- files modified: src/index.ts (exports)
+- scope note: M4.2 delivers the reusable ResourceCard React component in packages/ui — the card shell M4.3–M4.6 viewers plug into via the `viewer` prop. Verification badges use M3.1 semantic tokens; viewer slot is verification-gated (verified only) per AGENTS.md §5; external link uses rel=noopener noreferrer. Imports ResourceRef/VerificationStatus/Difficulty/Priority from @research-roadmap/schema (no ui→core dep). One test-assertion fix during the slice: onBlur sets box-shadow:'none' which jsdom normalizes to 'none' (not '') — corrected the assertion to match real behavior (not a source defect). Type-specific viewers (M4.3 YouTube, M4.4 GitHub, M4.5 web, M4.6 software/guide) are NOT built here.
+
+m43_gates (Cline session 2026-10-09, packages/ui):
+- test: 132/132 passed (15 files) — was 110/110; +22 from youtubeEmbed.test.ts (15) and YouTubeEmbed.test.tsx (7)
+- typecheck: clean (tsc --noEmit, no output)
+- lint: clean (eslint src/, no output)
+- build: clean (tsc --declaration --emitDeclarationOnly; emitted youtubeEmbed.d.ts, dist/components/YouTubeEmbed.d.ts)
+- files created: src/youtubeEmbed.ts, src/youtubeEmbed.test.ts, src/components/YouTubeEmbed.tsx, src/components/YouTubeEmbed.test.tsx
+- files modified: src/index.ts (exports: YouTubeEmbed component + youtubeEmbed pure helpers + types)
+- scope note: M4.3 delivers the privacy-enhanced YouTube viewer (AGENTS.md §5). Two fixes during the slice, both legitimate: (1) TS2345 — the isYouTube boolean did not narrow resource.kind; replaced with an explicit kind ternary so resolveYouTubeEmbedTarget receives a narrowed union. (2) prefer-const — playlistId was never reassigned. Neither concealed a defect. IDs are derived from the verified URL only (never fabricated, §2); iframe src is always youtube-nocookie.com; renders nothing unless embed==='iframe' and a valid id resolves. Consumption: pass <YouTubeEmbed resource={r} /> as ResourceCard's viewer prop (ResourceCard already gates on verified + provides external fallback). M4.4 GitHub repo viewer is next.
+
+next_session_instructions:
+- Resume Research Roadmap. Read AGENTS.md, this file, docs/REQUIREMENTS.md, docs/PLAN.md.
+- Environment: Windows + PowerShell; pnpm 12.10.1, node v24.21.0; workspace binaries linked under node_modules/.bin.
+- Run gates per package directly, redirect to a file, then read the file. If the 30s shell cap trips on first Vite/jsdom transform, use Start-Process + poll.
+- Do NOT commit, push, or add git remotes without explicit user authorization. Currently no commits on master; all work untracked.
+- M3 Visual System milestone COMPLETE (M3.1 tokens, M3.2 node visuals, M3.3 responsive, M3.4 accessibility [reduced-motion + keyboard-nav primitives], M3.5 performance [M3.5a culling + M3.5b render-scheduler]). All as tested pure primitives in packages/ui.
+- M4 resource experience IN PROGRESS. M4.1 DONE: DataSection.tsx (selected-node details: description, learning goals, prerequisites, leads-to, what's-next, common mistakes, resource+verified summary). Related-node titles are caller-resolved (no ui->core dep); imports only RoadmapNode from @research-roadmap/schema. Global jsdom matchMedia mock lives at src/test/setup.ts (wired via vitest.config.ts setupFiles) - reuse for any component test touching useMediaQuery/useBreakpoint/useReducedMotion. Use fireEvent for interactions (user-event is NOT installed; do not add it).
+- Next actionable slice per docs/PLAN.md milestone order = M4.4 GitHub repo viewer (AGENTS.md §5: do NOT iframe a GitHub repo page — show repo title, owner, description, language, useful metadata, README preview, and an Open Repository button; deliver via ResourceCard.viewer). Then M4.5 web embed verification, M4.6 software/guide viewer. When a graph/sidebar shell is assembled, render <DataSection> for the selected node and <ResourceCard> per resource, and wire the deferred primitives:
+     • render scheduling: route the container's render() through createRenderScheduler (one flush/frame).
+     • culling: compute WorldBounds from the camera via packages/core screenToWorld, then render cullNodesToBounds(nodes, worldBounds).
+     • keyboard nav: useGraphKeyboardNavigation (nodes, currentId from focus, focus returned id via ref map).
+- M3.4b focus restoration after closing floating windows — BLOCKED on M5 window system (does not exist yet). Do NOT build it speculatively before M5 exists.
+- All M3.x work belongs to packages/ui (design-system agent). Do not modify packages/core without a docs/REQUESTS.md handoff (its lint gate is still red — see open risks).
+

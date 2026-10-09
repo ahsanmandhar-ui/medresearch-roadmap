@@ -1,0 +1,14 @@
+{
+  "id": "resource-example",
+  "partition": "videos",
+  "kind": "youtube-video",
+  "title": "Verified title",
+  "url": "https://example.invalid/pending",
+  "description": "Pending example — replace only after verification.",
+  "embed": "external",
+  "verification": {
+    "status": "pending",
+    "notes": "Template only; not production content."
+  },
+  "tags": []
+}

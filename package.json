@@ -1,0 +1,25 @@
+{
+  "name": "research-roadmap",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interactive research roadmap — public viewer and private master editor",
+  "scripts": {
+    "dev": "pnpm --parallel dev",
+    "build": "pnpm --parallel build",
+    "typecheck": "pnpm --parallel typecheck",
+    "lint": "pnpm --parallel lint",
+    "test": "pnpm --parallel test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}
