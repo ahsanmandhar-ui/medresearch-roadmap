@@ -43,4 +43,20 @@ export { createRenderScheduler } from './renderScheduler.js';
 export type { RenderScheduler, RenderSchedulerOptions, FrameHandle, RequestFrame, CancelFrame } from './renderScheduler.js';
 export { extractYouTubeIds, resolveYouTubeEmbedTarget, buildPrivacyEnhancedEmbedUrl } from './youtubeEmbed.js';
 export type { YouTubeIds, YouTubeEmbedTarget } from './youtubeEmbed.js';
+export { GitHubRepoViewer } from './components/GitHubRepoViewer.js';
+export type { GitHubRepoViewerProps, GitHubRepoViewerTheme, GitHubRepoMeta } from './components/GitHubRepoViewer.js';
+export { parseGitHubRepo, formatCount } from './githubRepo.js';
+export type { GitHubRepoRef } from './githubRepo.js';
+export {
+  evaluateFrameability,
+  parseFrameAncestors,
+  originMatchesDirective,
+} from './frameSafety.js';
+export type { FrameSafetyResult, FrameabilityInput } from './frameSafety.js';
+export { WebEmbed } from './components/WebEmbed.js';
+export type { WebEmbedProps, WebEmbedTheme } from './components/WebEmbed.js';
+export { WebEmbedViewer } from './components/WebEmbedViewer.js';
+export type { WebEmbedViewerProps, WebEmbedViewerTheme } from './components/WebEmbedViewer.js';
+export { isWebEmbedKind, resolveWebEmbedMode, displayHost } from './webEmbed.js';
+export type { WebEmbedKind, WebEmbedMode } from './webEmbed.js';
 
